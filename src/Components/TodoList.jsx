@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { showUser, deleteUser } from "../Redux/Slice/UserDetailSlice";
+import { showUser, deleteUser, editUser } from "../Redux/Slice/UserDetailSlice";
 
 const WebList = () => {
   const dispatch = useDispatch();
@@ -12,18 +12,39 @@ const WebList = () => {
     dispatch(showUser());
   }, []);
 
-  function handleDelete(id) {}
-
   const [editToggel, setEditToggel] = useState(false);
   const [editID, setEditID] = useState("");
   const [user, setUser] = useState();
+  const [value, setValue] = useState();
 
   function handleOnChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  function handleStartEditing() {}
-  function handleEdit(id) {}
+  function handleValue(e) {
+    const app = WEB.find((app) => app.id === editID);
+    console.log(app);
+    // if (app) {
+    //   setValue({ ...value, [e.target.name]: e.target.value });
+    // }
+    // console.log("VALUE", value);
+  }
+
+  function handleStartEditing(id) {
+    setEditToggel(!editToggel);
+    setEditID(id);
+    handleValue(id);
+  }
+  function handleEdit() {
+    console.log(user);
+    dispatch(
+      editUser({
+        id: editID,
+        data: user,
+      })
+    );
+    setEditToggel(false);
+  }
 
   return (
     <>
@@ -63,7 +84,10 @@ const WebList = () => {
             </div>
 
             <div className="col-span-1 my-5 flex justify-evenly items-center text-teal-400   ">
-              <button className="  h-full px-5 cursor-pointer  bg-teal-400 text-slate-800 font-bold   rounded-xl hover:bg-transparent hover:border-2 hover:border-teal-400 hover:text-teal-400 ">
+              <button
+                onClick={handleEdit}
+                className="  h-full px-5 cursor-pointer  bg-teal-400 text-slate-800 font-bold   rounded-xl hover:bg-transparent hover:border-2 hover:border-teal-400 hover:text-teal-400 "
+              >
                 Save
               </button>
             </div>
@@ -90,7 +114,7 @@ const WebList = () => {
             <div className="col-span-1 flex justify-evenly items-center text-teal-400   ">
               <button
                 onClick={() => {
-                  setEditToggel(!editToggel), setEditID(web.id);
+                  handleStartEditing(web.id);
                 }}
               >
                 {editToggel ? (

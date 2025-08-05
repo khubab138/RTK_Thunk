@@ -58,6 +58,31 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
+//EditUSER
+
+export const editUser = createAsyncThunk(
+  "editUser",
+  async (data, { rejectWithValue }) => {
+    console.log("Data", data);
+
+    const response = await fetch(
+      `https://688f92e2f21ab1769f899a85.mockapi.io/crud/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    try {
+      const result = response.json();
+      return result;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const userDetail = createSlice({
   name: "userDetail",
@@ -93,6 +118,18 @@ export const userDetail = createSlice({
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.loading = false;
       state.users = state.users.filter((ele) => ele.id != action.payload.id);
+    });
+
+    //HAndle UserEdit
+    builder.addCase(editUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(editUser.fulfilled, (state, action) => {
+      state.loading = false;
+      console.log("IN_REDUCER", action.payload);
+      state.users = state.users.map((item) =>
+        item.id === action.payload.id ? state.users.push(action.payload) : item
+      );
     });
   },
 });
