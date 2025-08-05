@@ -126,7 +126,7 @@ export const userDetail = createSlice({
     });
     builder.addCase(editUser.fulfilled, (state, action) => {
       state.loading = false;
-      console.log("IN_REDUCER", action.payload);
+
       state.users = state.users.map((item) =>
         item.id === action.payload.id ? state.users.push(action.payload) : item
       );

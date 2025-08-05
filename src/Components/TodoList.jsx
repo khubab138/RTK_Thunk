@@ -21,20 +21,12 @@ const WebList = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  function handleValue(e) {
-    const app = WEB.find((app) => app.id === editID);
-    console.log(app);
-    // if (app) {
-    //   setValue({ ...value, [e.target.name]: e.target.value });
-    // }
-    // console.log("VALUE", value);
-  }
-
   function handleStartEditing(id) {
     setEditToggel(!editToggel);
     setEditID(id);
     handleValue(id);
   }
+
   function handleEdit() {
     console.log(user);
     dispatch(
